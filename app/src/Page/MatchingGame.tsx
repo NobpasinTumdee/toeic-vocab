@@ -21,6 +21,26 @@ const MatchingGame = () => {
     const [cards, setCards] = useState<GameCard[]>([]);
     const [isGameCompleted, setIsGameCompleted] = useState(false);
     const [isProcessing, setIsProcessing] = useState(false);
+    const [Speechrate, setSpeechrate] = useState(0.8);
+    const [mute, setMute] = useState(false);
+
+    // --- (Text-to-Speech) ---
+    const speak = (text: string, type: 'eng' | 'thai') => {
+        // เช็คว่า Browser รองรับไหม
+        if (!window.speechSynthesis) return;
+
+        // หยุดเสียงเก่าก่อน (เผื่อกดรัวๆ จะได้ไม่พูดซ้อนกัน)
+        // window.speechSynthesis.cancel();
+
+        const utterance = new SpeechSynthesisUtterance(text);
+        
+        utterance.lang = type === 'eng' ? 'en-US' : 'th-TH';
+        
+        // ปรับความเร็ว (0.1 - 10), 1 คือปกติ, 0.8 ช้าลงนิดหน่อยเพื่อให้ฟังชัด
+        utterance.rate = Speechrate; 
+        
+        window.speechSynthesis.speak(utterance);
+    };
 
     const initializeGame = () => {
         const shuffledWords = [...wordData]
@@ -61,11 +81,16 @@ const MatchingGame = () => {
     }, []);
 
     const handleCardClick = (clickedCard: GameCard) => {
+        if (!mute) {
+            speak(clickedCard.text, clickedCard.type);
+        }
+
         if (
             isProcessing ||
             clickedCard.status === 'matched' ||
             clickedCard.status === 'selected'
         ) return;
+
 
         const newCards = cards.map(c =>
             c.uniqueId === clickedCard.uniqueId ? { ...c, status: 'selected' as const } : c
@@ -137,6 +162,16 @@ const MatchingGame = () => {
                         {card.text}
                     </button>
                 ))}
+            </div>
+
+            <div className="matching-footer">
+                <button onClick={() => setMute(!mute)}>{mute ? '🔇' : '🔊'}</button>
+                <select name="speech-rate" id="speech-rate-select" onChange={(e) => setSpeechrate(parseFloat(e.target.value))}>
+                    <option value="0.5">ช้า</option>
+                    <option value="0.8" selected>ปานกลาง</option>
+                    <option value="1.2">เร็ว</option>
+                    <option value="1.5">เร็วมาก</option>
+                </select>
             </div>
 
             {/* Modal */}
