@@ -1,0 +1,200 @@
+/* Container */
+.matching-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: 100vh;
+    padding: 20px;
+    background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+/* Header */
+.matching-header {
+    text-align: center;
+    margin-bottom: 24px;
+}
+
+.matching-title {
+    font-size: 2.5rem;
+    color: #2d3748;
+    margin: 0;
+    font-weight: 800;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.matching-subtitle {
+    color: #718096;
+    font-size: 1.1rem;
+    margin-top: 8px;
+}
+
+/* Grid Layout: 5 Columns x 4 Rows */
+.matching-grid {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 12px;
+    width: 100%;
+    max-width: 1000px;
+    perspective: 1000px;
+}
+
+/* Card Styling */
+.matching-card {
+    position: relative;
+    height: 80px;
+    background: #ffffff;
+    border: none;
+    border-radius: 12px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05), 0 1px 3px rgba(0, 0, 0, 0.1);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 8px;
+    transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+    font-size: 1rem;
+    font-weight: 600;
+    color: #4a5568;
+    user-select: none;
+    overflow: hidden;
+}
+
+/* Hover Effect */
+.matching-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 10px 15px rgba(0, 0, 0, 0.1);
+}
+
+/* State: Selected */
+.matching-card-selected {
+    background: #3182ce;
+    color: white;
+    transform: scale(1.05);
+    box-shadow: 0 0 0 3px rgba(66, 153, 225, 0.5);
+    z-index: 10;
+}
+
+/* State: Matched */
+.matching-card-matched {
+    background: #48bb78;
+    color: white;
+    opacity: 0;
+    transform: scale(0.8);
+    pointer-events: none;
+}
+
+/* State: Incorrect */
+.matching-card-incorrect {
+    background: #e53e3e;
+    color: white;
+    animation: matching-shake 0.5s ease;
+}
+
+/* Animations */
+@keyframes matching-shake {
+
+    0%,
+    100% {
+        transform: translateX(0);
+    }
+
+    25% {
+        transform: translateX(-5px);
+    }
+
+    75% {
+        transform: translateX(5px);
+    }
+}
+
+@keyframes matching-popIn {
+    0% {
+        opacity: 0;
+        transform: scale(0.5);
+    }
+
+    100% {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
+.matching-card {
+    animation: matching-popIn 0.4s ease-out backwards;
+}
+
+.matching-card:nth-child(1) {
+    animation-delay: 0.05s;
+}
+
+.matching-card:nth-child(2) {
+    animation-delay: 0.1s;
+}
+
+/* Modal */
+.matching-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.7);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 100;
+    backdrop-filter: blur(4px);
+}
+
+.matching-modal {
+    background: white;
+    padding: 40px;
+    border-radius: 20px;
+    text-align: center;
+    box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
+    animation: matching-popIn 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+.matching-btn-restart {
+    background: #3182ce;
+    color: white;
+    border: none;
+    padding: 12px 24px;
+    font-size: 1.2rem;
+    border-radius: 50px;
+    cursor: pointer;
+    margin-top: 20px;
+    transition: transform 0.2s;
+    box-shadow: 0 4px 6px rgba(50, 38, 174, 0.2);
+}
+
+.matching-btn-restart:hover {
+    background: #2b6cb0;
+    transform: scale(1.05);
+}
+
+/* --- Responsive Design --- */
+@media (max-width: 768px) {
+    .matching-grid {
+        grid-template-columns: repeat(4, 1fr);
+        gap: 8px;
+    }
+
+    .matching-card {
+        height: 60px;
+        font-size: 0.85rem;
+        padding: 4px;
+    }
+
+    .matching-title {
+        font-size: 1.8rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .matching-grid {
+        grid-template-columns: repeat(3, 1fr);
+    }
+}
